@@ -1,90 +1,115 @@
-## 🧠 Desafio Técnico – Sistema de Gestão de Projetos e Demandas
+# Desafio Gestão - Project Management API
 
-### 📘 Contexto
-Sua missão é desenvolver uma **API RESTful em Java com Spring Boot** para gerenciar **projetos e tarefas (demandas)** de uma empresa.  
-O sistema será utilizado por um time de desenvolvimento para organizar suas entregas, acompanhar o status das tarefas e realizar análises simples.
+## 🚀 Tecnologias Utilizadas
 
----
+- **Java 17**
+- **Spring Boot 3.5.6**
+- **PostgreSQL 15**
+- **MapStruct** (mapeamento de DTOs)
+- **Swagger/OpenAPI** (documentação da API)
+- **Docker & Docker Compose**
+- **Bean Validation**
+- **Spring Data JPA**
 
-## 🎯 Requisitos Técnicos
+## 📋 Pré-requisitos
 
-### 🧱 1. Modelagem de Domínio
+- Docker e Docker Compose instalados
+- Java 17+ (opcional, se quiser rodar sem Docker)
 
-A modelagem pode ser modificada pelo inscrito. Porém, precisa ser justificado o motivo.
+## 🐳 Como executar com Docker
 
-#### `Project`
-| Campo | Tipo | Descrição |
-|-------|------|-----------|
-| `id` | UUID/Long | Identificador |
-| `name` | String (3–100) | **Obrigatório** |
-| `description` | String | Opcional |
-| `startDate` | Date | Início do projeto |
-| `endDate` | Date | Opcional |
+### Opção 1: Apenas PostgreSQL (Desenvolvimento)
+```bash
+# Subir apenas o banco PostgreSQL
+docker-compose -f docker-compose-dev.yml up -d
 
-#### `Task`
-| Campo | Tipo | Descrição |
-|-------|------|-----------|
-| `id` | UUID/Long | Identificador |
-| `title` | String (5–150) | **Obrigatório** |
-| `description` | String | Detalhes da tarefa |
-| `status` | Enum | TODO / DOING / DONE |
-| `priority` | Enum | LOW / MEDIUM / HIGH |
-| `dueDate` | Date | Data limite |
-| `projectId` | FK(Project) | Relacionamento |
+# Executar a aplicação localmente
+./mvnw spring-boot:run
+```
 
----
+### Opção 2: Aplicação completa com Docker
+```bash
+# Subir a aplicação completa (PostgreSQL + App)
+docker-compose up -d --build
+```
 
-### 🌐 2. Endpoints REST
+## 🔗 URLs importantes
 
-| Método | Endpoint | Descrição |
-|---------|-----------|-----------|
-| **POST** | `/projects` | Criar novo projeto (`name` obrigatório) |
-| **GET** | `/projects` | Listar todos os projetos (paginação opcional) |
-| **POST** | `/tasks` | Criar nova tarefa vinculada a um projeto |
-| **GET** | `/tasks?status=&priority=&projectId=` | Buscar tarefas com filtros opcionais |
-| **PUT** | `/tasks/{id}/status` | Atualizar apenas o status da tarefa |
-| **DELETE** | `/tasks/{id}` | Remover tarefa |
+- **Aplicação**: http://localhost:8080
+- **Swagger UI**: http://localhost:8080/swagger-ui.html
+- **API Docs**: http://localhost:8080/api-docs
+- **Database**: PostgreSQL na porta 5432
 
----
+## 📊 Credenciais do Banco
 
-## ✅ Requisitos Obrigatórios
-- 🧑‍💻 **Java 17+** e **Spring Boot 3+**  
-- 🧠 **Spring Data JPA**  
-- 🗄️ Banco Relacional (**PostgreSQL** ou **H2**)  
-- ✔️ **Bean Validation**  
-- 🧪 **Testes Automatizados**  
-  - Unitários (Services mockados)  
-  - Integração (Controllers com MockMvc ou Testcontainers)  
-- ⚠️ Tratamento de erros com `@ControllerAdvice`  
-- 📦 Uso de **DTOs** (`record` ou classes simples)  
-- 📘 **README** explicando como rodar o projeto
+- **Host**: localhost
+- **Port**: 5432
+- **Database**: desafio_gestao
+- **Username**: admin
+- **Password**: admin123
 
----
+## 🛠 Endpoints da API
 
-## 🏅 Diferenciais (Pontos Extras)
-- 🧭 Documentação **Swagger / OpenAPI**  
-- 🔐 Autenticação simples com **JWT** ou Basic Auth  
-- 🐳 Configuração de **Docker** / **docker-compose**  
-- ⚡ Uso de **MapStruct** para mapeamento de DTOs  
-- 🔍 Testes de API com **RestAssured**
+### Projects
+- **POST** `/projects` - Criar novo projeto
+- **GET** `/projects` - Listar todos os projetos
+- **GET** `/projects/{id}` - Buscar projeto por ID
 
----
+## 📝 Exemplo de uso
 
-## 🛠️ Tags
-`#Java` `#SpringBoot` `#Backend` `#DesafioTecnico`  
-`#API` `#RestAPI` `#Docker` `#Kubernetes`  
-`#PostgreSQL` `#Oracle` `#JPA` `#Swagger`  
-`#RestAssured` `#CleanCode` `#SoftwareEngineering`
+### Criar um projeto:
+```json
+POST /projects
+{
+  "name": "Meu Projeto",
+  "description": "Descrição do projeto",
+  "startDate": "2024-01-01",
+  "endDate": "2024-12-31"
+}
+```
 
----
+### Resposta:
+```json
+{
+  "id": 1,
+  "name": "Meu Projeto",
+  "description": "Descrição do projeto",
+  "startDate": "2024-01-01",
+  "endDate": "2024-12-31"
+}
+```
 
-### 💡 Dica
-> Foque em **organização, boas práticas e clareza do código**.  
-> Um bom README e commits bem descritos também serão avaliados. 😉
+## 🏗 Arquitetura
 
----
+O projeto segue os princípios da **Arquitetura Limpa** com as seguintes camadas:
 
-### 🧾 Licença
-Este projeto foi desenvolvido exclusivamente para o **processo seletivo SIS Innov & Tech** e não deve ser utilizado para fins comerciais.
+- **Domain**: Entidades e repositórios
+- **Application**: Serviços e mappers
+- **Infrastructure**: Configurações
+- **Presentation**: Controllers e DTOs
 
----
+## ✨ Funcionalidades Implementadas
+
+- ✅ **DTOs com Records**
+- ✅ **MapStruct para mapeamento**
+- ✅ **Tratamento global de erros com @ControllerAdvice**
+- ✅ **Validações com Bean Validation**
+- ✅ **Documentação automática com Swagger**
+- ✅ **Docker para ambiente de desenvolvimento**
+- ✅ **PostgreSQL como banco de dados**
+
+## 🔧 Comandos úteis
+
+```bash
+# Parar os containers
+docker-compose down
+
+# Ver logs da aplicação
+docker-compose logs -f app
+
+# Ver logs do PostgreSQL
+docker-compose logs -f postgres
+
+# Rebuild da aplicação
+docker-compose up -d --build app
+```
