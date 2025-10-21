@@ -3,6 +3,7 @@ package application.service;
 import domain.entity.Project;
 import domain.repository.ProjectRepository;
 import org.springframework.stereotype.Service;
+import jakarta.validation.Valid;
 
 @Service
 public class ProjectService {
@@ -13,7 +14,7 @@ public class ProjectService {
         this.projectRepository = projectRepository;
     }
 
-    public Project save(Project project){
+    public Project save(@Valid Project project){
         return projectRepository.save(project);
     }
 

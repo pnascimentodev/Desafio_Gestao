@@ -28,4 +28,7 @@ public class Project {
 
     public LocalDate endData;
 
+    public Long getId() {
+        return id;
+    }
 }
