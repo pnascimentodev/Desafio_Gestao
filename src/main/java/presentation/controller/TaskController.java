@@ -1,7 +1,9 @@
 package presentation.controller;
 
 import application.mapper.TaskMapper;
+import application.service.ProjectService;
 import application.service.TaskService;
+import domain.entity.Project;
 import domain.entity.Task;
 import domain.enums.Priority;
 import domain.enums.Status;
@@ -25,10 +27,12 @@ import java.util.stream.Collectors;
 public class TaskController {
 
     private final TaskService taskService;
+    private final ProjectService projectService;
     private final TaskMapper taskMapper;
 
-    public TaskController(TaskService taskService, TaskMapper taskMapper) {
+    public TaskController(TaskService taskService, ProjectService projectService, TaskMapper taskMapper) {
         this.taskService = taskService;
+        this.projectService = projectService;
         this.taskMapper = taskMapper;
     }
 
@@ -36,10 +40,16 @@ public class TaskController {
     @Operation(summary = "Create a new task", description = "Creates a new task with the provided details")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Task created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid input data")
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "404", description = "Project not found")
     })
     public ResponseEntity<TaskResponseDTO> createTask(@Valid @RequestBody TaskCreateDTO taskCreateDTO) {
-        Task task = taskMapper.toEntity(taskCreateDTO);
+        Project project = projectService.findById(taskCreateDTO.projectId());
+        if (project == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        Task task = taskMapper.toEntity(taskCreateDTO, project);
         Task savedTask = taskService.save(task);
         TaskResponseDTO responseDTO = taskMapper.toResponseDTO(savedTask);
 
@@ -50,10 +60,16 @@ public class TaskController {
     @Operation(summary = "Update an existing task", description = "Updates an existing task with the provided details")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Task updated successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid input data")
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "404", description = "Project not found")
     })
     public ResponseEntity<TaskResponseDTO> updateTask(@Valid @RequestBody TaskCreateDTO taskCreateDTO) {
-        Task task = taskMapper.toEntity(taskCreateDTO);
+        Project project = projectService.findById(taskCreateDTO.projectId());
+        if (project == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        Task task = taskMapper.toEntity(taskCreateDTO, project);
         Task updatedTask = taskService.save(task);
         TaskResponseDTO responseDTO = taskMapper.toResponseDTO(updatedTask);
 

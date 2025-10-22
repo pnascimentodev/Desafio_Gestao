@@ -1,6 +1,7 @@
 package application.mapper;
 
 import domain.entity.Task;
+import domain.entity.Project;
 import presentation.dto.TaskCreateDTO;
 import presentation.dto.TaskResponseDTO;
 import org.mapstruct.*;
@@ -15,7 +16,7 @@ public interface TaskMapper {
     @Mapping(target = "priority", source = "dto.priority")
     @Mapping(target = "dueDate", source = "dto.dueDate")
     @Mapping(target = "project", source = "project")
-    Task toEntity(TaskCreateDTO dto);
+    Task toEntity(TaskCreateDTO dto, Project project);
 
     @Mapping(target = "projectId", source = "project.id")
     @Mapping(target = "projectName", source = "project.name")
