@@ -1,10 +1,13 @@
 package application.service;
 
 import domain.entity.Task;
+import domain.enums.Priority;
 import domain.enums.Status;
 import domain.repository.TaskRepository;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class TaskService {
@@ -22,7 +25,8 @@ public class TaskService {
     public Task findById(Long id){
         return taskRepository.findById(id).orElse(null);
     }
-    public Iterable<Task> findAll(){
+
+    public List<Task> findAll(){
         return taskRepository.findAll();
     }
 
@@ -34,12 +38,15 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
-   public Task findByStatus (Status status){
+    public List<Task> findByStatus(Status status){
         return taskRepository.findByStatus(status);
+    }
 
-   }
-
-    public Task findByPriority(Integer priority){
+    public List<Task> findByPriority(Priority priority){
         return taskRepository.findByPriority(priority);
+    }
+
+    public List<Task> findByFilters(Status status, Priority priority, Long projectId){
+        return taskRepository.findByFilters(status, priority, projectId);
     }
 }
