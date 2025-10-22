@@ -19,22 +19,79 @@ public class Task {
 
     @NotBlank(message = "Task title must not be blank")
     @Size(min = 5, max = 150, message = "Task title must be between 5 and 150 characters")
-    public String title;
+    private String title;
 
-    public String description;
+    private String description;
 
     @Enumerated(EnumType.STRING)
-    @NotBlank(message = "Status id required")
+    @NotNull(message = "Status is required")
     private Status status;
 
     @Enumerated(EnumType.STRING)
-    @NotBlank(message = "Priority is required")
+    @NotNull(message = "Priority is required")
     private Priority priority;
 
-    public LocalDate dueDate;
+    private LocalDate dueDate;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn (name = "project_id", nullable = false)
-    @NotBlank (message = "Project id required")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id", nullable = false)
+    @NotNull(message = "Project is required")
     private Project project;
+
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
+    }
+
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
 }
