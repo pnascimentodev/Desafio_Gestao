@@ -9,9 +9,8 @@ import org.mapstruct.*;
 public interface ProjectMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "endData", source = "endDate")
+    @Mapping(target = "tasks", ignore = true)
     Project toEntity(ProjectCreateDTO dto);
 
-    @Mapping(target = "endDate", source = "endData")
     ProjectResponseDTO toResponseDTO(Project project);
 }
