@@ -4,6 +4,7 @@ services:
   postgres:
     image: postgres:15-alpine
     container_name: desafio-postgres
+    restart: unless-stopped
     environment:
       POSTGRES_DB: desafio_gestao
       POSTGRES_USER: admin
@@ -15,12 +16,19 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - desafio-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d desafio_gestao"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   app:
     build: .
     container_name: desafio-app
+    restart: unless-stopped
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/desafio_gestao
       SPRING_DATASOURCE_USERNAME: admin
